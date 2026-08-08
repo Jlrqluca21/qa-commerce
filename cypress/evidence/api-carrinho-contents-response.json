@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "body": [
+    {
+      "productId": 1,
+      "name": "Moletom com capuz \"Se você acha que nada é impossível...\"",
+      "price": 59,
+      "quantity": 2
+    }
+  ]
+}
