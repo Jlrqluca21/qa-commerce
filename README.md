@@ -12,7 +12,7 @@
 
 Via terminal, rode os seguintes comandos:
 ```  
-git clone https://github.com/fabioaraujoqa/qa-commerce.git
+git clone https://github.com/Jlrqluca21/qa-commerce
 ```
 ```
 cd qa-commerce
