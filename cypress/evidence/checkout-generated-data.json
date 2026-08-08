@@ -1,0 +1,16 @@
+{
+  "shipping": {
+    "firstName": "Ofélia",
+    "lastName": "Barros",
+    "address": "459 Marginal Carvalho",
+    "number": "3040",
+    "cep": "86017365",
+    "phone": "08896527193",
+    "email": "ofelia.barros68@gmail.com"
+  },
+  "payment": {
+    "cardNumber": "4111111111111111",
+    "expiry": "12/30",
+    "cvc": "615"
+  }
+}

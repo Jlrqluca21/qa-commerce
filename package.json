@@ -6,10 +6,11 @@
   "scripts": {
     "start": "node src/server.js",
     "db": "node scripts/init_db.js",
-    "cy:open": "cypress open",
-    "cy:run": "cypress run",
-    "test:e2e": "cypress run",
-    "test": "npm run test:e2e"
+    "cy:open": "node scripts/run-cypress.js open",
+    "cy:run": "node scripts/run-cypress.js run",
+    "test:e2e": "node scripts/run-cypress.js run",
+    "test": "npm run test:e2e",
+    "report:open": "start cypress/reports/index.html"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +29,8 @@
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^26.0.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
-    "cypress": "^15.20.0"
+    "@faker-js/faker": "^10.5.0",
+    "cypress": "^15.20.0",
+    "cypress-mochawesome-reporter": "^5.0.0"
   }
 }

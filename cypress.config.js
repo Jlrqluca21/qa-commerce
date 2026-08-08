@@ -5,6 +5,22 @@ const { addCucumberPreprocessorPlugin } = require('@badeball/cypress-cucumber-pr
 const { createEsbuildPlugin } = require('@badeball/cypress-cucumber-preprocessor/esbuild');
 
 module.exports = defineConfig({
+  video: true,
+  videosFolder: 'cypress/videos',
+  screenshotsFolder: 'cypress/screenshots',
+  reporter: 'cypress-mochawesome-reporter',
+  reporterOptions: {
+    reportDir: 'cypress/reports',
+    overwrite: true,
+    html: true,
+    json: true,
+    charts: true,
+    embeddedScreenshots: true,
+    inlineAssets: true,
+    saveAllAttempts: true,
+    ignoreVideos: false,
+    videoOnFailOnly: false,
+  },
   e2e: {
     // Use feature files for Cucumber BDD scenarios.
     specPattern: 'cypress/e2e/**/*.feature',
@@ -19,6 +35,7 @@ module.exports = defineConfig({
       on('file:preprocessor', createBundler({
         plugins: [createEsbuildPlugin(config)],
       }));
+      require('cypress-mochawesome-reporter/plugin')(on);
       return config;
     },
   },
