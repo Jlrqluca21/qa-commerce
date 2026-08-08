@@ -42,3 +42,4 @@ jobs:
             cypress/screenshots
             cypress/videos
             cypress/evidence
+            cypress/reports
