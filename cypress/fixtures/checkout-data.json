@@ -1,0 +1,16 @@
+{
+  "shipping": {
+    "firstName": "Maria",
+    "lastName": "Silva",
+    "address": "Rua das Flores, 123",
+    "number": "456",
+    "cep": "12345678",
+    "phone": "11987654321",
+    "email": "maria.silva@example.com"
+  },
+  "payment": {
+    "cardNumber": "4111111111111111",
+    "expiry": "12/30",
+    "cvc": "123"
+  }
+}

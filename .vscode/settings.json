@@ -1,0 +1,19 @@
+{
+  "files.associations": {
+    "*.feature": "cucumber"
+  },
+  "cucumberautocomplete.features": "cypress/e2e/**/*.feature",
+  "cucumberautocomplete.steps": [
+    "cypress/e2e/**/steps/*.js"
+  ],
+  "cucumberautocomplete.syncfeatures": "cypress/e2e/**/*.feature",
+  "cucumberautocomplete.gherkinDefinitionPart": "(Dado|Quando|Então)\\(",
+  "cucumberautocomplete.pureTextSteps": true,
+  "cucumberautocomplete.strictGherkinCompletion": false,
+  "cucumberautocomplete.strictGherkinValidation": false,
+  "editor.quickSuggestions": {
+    "comments": false,
+    "strings": true,
+    "other": true
+  }
+}

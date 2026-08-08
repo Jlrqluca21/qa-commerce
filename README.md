@@ -49,7 +49,7 @@ npm run cy:run
 ```
 
 ### Executar testes BDD de API
-O cenário de API principal está em `cypress/e2e/api-qa-commerce.feature`.
+O cenário de API principal está em `cypress/e2e/api/features/api-qa-commerce.feature`.
 
 ### Observações
 - O teste de API valida o endpoint `GET /api/produtos` e o endpoint `POST /api/carrinho`.
@@ -76,23 +76,38 @@ npm run cy:open
 
 Executar apenas o cenário de API (feature específica):
 ```bash
-npx cypress run --spec "cypress/e2e/api-qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
+npx cypress run --spec "cypress/e2e/api/features/api-qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
 ```
 
 Executar apenas os testes UI (feature específica):
 ```bash
-npx cypress run --spec "cypress/e2e/qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
+npx cypress run --spec "cypress/e2e/web/features/qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
 ```
 
 Observação: os comandos acima iniciam o Cypress em modo headless e geram vídeo por padrão quando `video=true`.
 
+## Relatório visual das execuções
+
+Os testes também geram um relatório HTML visual com screenshots e detalhes da execução usando Mochawesome.
+
+### Gerar o relatório
+```bash
+npm test
+```
+
+### Visualizar o relatório
+```bash
+npm run report:open
+```
+
+O relatório será aberto em seu navegador padrão a partir do arquivo:
+- `cypress/reports/index.html`
+
 ## Onde encontrar as evidências
 
-- Vídeos: `cypress/videos/*.mp4` (ex.: `cypress/videos/api-qa-commerce.feature.mp4`)
-- Screenshots: `cypress/screenshots/<spec>/*.png` (ex.: `cypress/screenshots/api-qa-commerce.feature/api-produtos-response.png`)
+- Vídeos: `cypress/videos/**/*.mp4` (ex.: `cypress/videos/api/features/api-qa-commerce.feature.mp4`)
+- Screenshots: `cypress/screenshots/<spec>/*.png` (ex.: `cypress/screenshots/api/features/api-qa-commerce.feature/api-produtos-response.png`)
 - JSON com responses das APIs: `cypress/evidence/*.json` (ex.: `cypress/evidence/api-produtos-response.json`)
-
-Se quiser que eu compacte as evidências em um ZIP ou atualize este README com mais detalhes, diga qual formato prefere.
 
 
 

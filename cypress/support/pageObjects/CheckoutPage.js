@@ -17,11 +17,11 @@ class CheckoutPage {
     if (data.email) cy.get('#email').clear().type(data.email);
   }
 
-  selectCardPayment() {
+  selectCardPayment(payment = {}) {
     cy.get('#payment-card').check();
-    cy.get('#card-number').should('be.visible').type('4111111111111111');
-    cy.get('#card-expiry').type('12/30');
-    cy.get('#card-cvc').type('123');
+    cy.get('#card-number').should('be.visible').type(payment.cardNumber || '4111111111111111');
+    cy.get('#card-expiry').type(payment.expiry || '12/30');
+    cy.get('#card-cvc').type(payment.cvc || '123');
   }
 
   acceptTermsAndSubmit() {

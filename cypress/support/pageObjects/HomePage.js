@@ -1,17 +1,17 @@
+import QaCommerceRequest from '../requests/QaCommerceRequest';
+
 class HomePage {
   visit() {
     cy.visit('/');
   }
 
   waitForProducts() {
-    cy.get('.add-to-cart', { timeout: 10000 }).should('exist');
+    cy.get('.add-to-cart', { timeout: 10000 }).first().should('be.visible');
   }
 
   addFirstProductToCart() {
-    // Ensure cart is empty before adding to avoid flakiness
-    cy.request('POST', '/api/limpar-carrinho', { userId: 1 }).then(() => {
+    QaCommerceRequest.clearCart(1).then(() => {
       cy.get('.add-to-cart').first().click();
-      // Wait for cart counter to update to 1
       cy.get('#cart-count', { timeout: 10000 }).should('contain', '1');
     });
   }

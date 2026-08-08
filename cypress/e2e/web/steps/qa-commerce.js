@@ -1,8 +1,8 @@
 // Importa as definições de passos Gherkin para o Cypress Cucumber preprocessor.
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
-import HomePage from '../support/pageObjects/home.page';
-import CartPage from '../support/pageObjects/cart.page';
-import CheckoutPage from '../support/pageObjects/checkout.page';
+import HomePage from '../../../support/pageObjects/home.page';
+import CartPage from '../../../support/pageObjects/cart.page';
+import CheckoutPage from '../../../support/pageObjects/checkout.page';
 
 // Acessa a página inicial da aplicação QA-Commerce.
 Given('que eu abra a página inicial do QA-Commerce', () => {
