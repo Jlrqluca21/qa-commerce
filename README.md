@@ -76,15 +76,16 @@ npm run cy:open
 
 Executar apenas o cenário de API (feature específica):
 ```bash
-npx cypress run --spec "cypress/e2e/api/features/api-qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
+npm run cy:run -- --spec "cypress/e2e/api/features/api-qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
 ```
 
 Executar apenas os testes UI (feature específica):
 ```bash
-npx cypress run --spec "cypress/e2e/web/features/qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
+npm run cy:run -- --spec "cypress/e2e/web/features/qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
 ```
 
 Observação: os comandos acima iniciam o Cypress em modo headless e geram vídeo por padrão quando `video=true`.
+Observação adicional: prefira `npm run cy:run` e `npm run cy:open`, pois esses scripts usam `scripts/run-cypress.js` para filtrar o warning de `allowCypressEnv` na saída do terminal.
 
 ## Relatório visual das execuções
 
