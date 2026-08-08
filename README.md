@@ -86,6 +86,37 @@ npm run cy:run -- --spec "cypress/e2e/api/features/api-qa-commerce.feature" --co
 npm run cy:run -- --spec "cypress/e2e/web/features/qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
 ```
 
+## CI/CD (GitHub Actions)
+
+O projeto ja possui pipeline configurada em:
+- `.github/workflows/cypress.yml`
+
+### Quando a pipeline roda
+- Em `push` para qualquer branch
+- Em `pull_request` para qualquer branch
+
+### Como a pipeline executa
+1. Faz checkout do repositorio (`actions/checkout@v4`)
+2. Configura Node.js 20 com cache de dependencias npm (`actions/setup-node@v4`)
+3. Executa os testes com `cypress-io/github-action@v6`, usando:
+	- `install-command: npm ci`
+	- `start: npm start`
+	- `wait-on: http://localhost:3000`
+	- `wait-on-timeout: 120`
+	- `command: npm run cy:run`
+
+### Artefatos publicados no CI
+Mesmo em caso de falha, a pipeline faz upload dos artefatos de teste (`if: always()`):
+- `cypress/screenshots`
+- `cypress/videos`
+- `cypress/evidence`
+- `cypress/reports` (inclui o `index.html` do Mochawesome)
+
+### O que isso garante
+- Execucao automatica dos testes E2E (API + WEB) em PRs e pushes
+- Evidencias disponiveis para investigacao de falhas
+- Ambiente de execucao padronizado (Ubuntu + Node 20)
+
 ## Relatório visual das execuções
 
 Os testes também geram um relatório HTML visual com screenshots e detalhes da execução usando Mochawesome.

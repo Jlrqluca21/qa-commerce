@@ -1,16 +1,16 @@
 {
   "shipping": {
-    "firstName": "Bernardo",
-    "lastName": "Silva",
-    "address": "32989 Travessa Antônio",
-    "number": "4813",
-    "cep": "52066896",
-    "phone": "75256070982",
-    "email": "bernardo.silva@live.com"
+    "firstName": "Cecília",
+    "lastName": "Albuquerque",
+    "address": "855 Travessa Martins",
+    "number": "9188",
+    "cep": "66409471",
+    "phone": "0107448156",
+    "email": "cecilia_albuquerque@hotmail.com"
   },
   "payment": {
     "cardNumber": "4111111111111111",
     "expiry": "12/30",
-    "cvc": "542"
+    "cvc": "881"
   }
 }
