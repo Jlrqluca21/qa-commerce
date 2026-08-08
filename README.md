@@ -38,53 +38,53 @@ A documentação funciona em: http://localhost:3000/api-docs/
 ### Pré-requisito
 O servidor deve estar rodando em `http://localhost:3000` antes de executar os testes.
 
-### Executar testes Cypress em modo aberto
-```
-npm run cy:open
-```
-
-### Executar testes Cypress em modo headless
-```
+### Executar todos os testes (API + WEB)
+```bash
 npm run cy:run
 ```
 
-### Executar testes BDD de API
-O cenário de API principal está em `cypress/e2e/api/features/api-qa-commerce.feature`.
+### Executar apenas testes de API
+Feature principal de API:
+`cypress/e2e/api/features/api-qa-commerce.feature`
+
+```bash
+npm run cy:run -- --spec "cypress/e2e/api/features/api-qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
+```
+
+### Executar apenas testes WEB
+Feature principal WEB:
+`cypress/e2e/web/features/qa-commerce.feature`
+
+```bash
+npm run cy:run -- --spec "cypress/e2e/web/features/qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
+```
+
+### Executar em modo interativo (Cypress Open)
+```bash
+npm run cy:open
+```
+
+No Test Runner, selecione manualmente a feature de API ou WEB desejada.
 
 ### Observações
-- O teste de API valida o endpoint `GET /api/produtos` e o endpoint `POST /api/carrinho`.
+- O teste de API valida os endpoints `GET /api/produtos` e `POST /api/carrinho`.
 - Use `npm start` em uma janela do terminal e os comandos de teste em outra.
+- Prefira `npm run cy:run` e `npm run cy:open`, pois usam `scripts/run-cypress.js` para filtrar warnings do terminal.
 
 *Parceria: Fábio Araújo, Bruna Emerich e Tamara Fontanella
 
-## Comandos úteis para executar os testes
+## Resumo rápido de execução
 
-Execute o servidor em uma janela de terminal:
 ```bash
+# 1) Subir aplicação
 npm start
-```
 
-Rodar todos os testes (headless):
-```bash
-npm run cy:run
-```
+# 2) Rodar API
+npm run cy:run -- --spec "cypress/e2e/api/features/api-qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
 
-Abrir o Test Runner (modo interativo):
-```bash
-npm run cy:open
+# 3) Rodar WEB
+npm run cy:run -- --spec "cypress/e2e/web/features/qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
 ```
-
-Executar apenas o cenário de API (feature específica):
-```bash
-npx cypress run --spec "cypress/e2e/api/features/api-qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
-```
-
-Executar apenas os testes UI (feature específica):
-```bash
-npx cypress run --spec "cypress/e2e/web/features/qa-commerce.feature" --config "baseUrl=http://localhost:3000,video=true"
-```
-
-Observação: os comandos acima iniciam o Cypress em modo headless e geram vídeo por padrão quando `video=true`.
 
 ## Relatório visual das execuções
 
