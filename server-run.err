@@ -1,0 +1,6 @@
+RangeNotSatisfiableError: Range Not Satisfiable
+    at createHttpError (D:\cypress\qa-commerce\node_modules\send\index.js:983:7)
+    at SendStream.error (D:\cypress\qa-commerce\node_modules\send\index.js:270:31)
+    at SendStream.send (D:\cypress\qa-commerce\node_modules\send\index.js:665:19)
+    at onstat (D:\cypress\qa-commerce\node_modules\send\index.js:724:10)
+    at FSReqCallback.oncomplete (node:fs:200:5)

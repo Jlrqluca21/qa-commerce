@@ -1,58 +1,39 @@
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
 import QaCommerceRequest from '../../../support/requests/QaCommerceRequest';
 
-function renderApiEvidence(title, response, screenshotName) {
-  cy.visit('/api-evidence.html').then(() => {
-    cy.document().then((doc) => {
-      doc.body.innerHTML = '';
-      doc.body.style.margin = '0';
-      doc.body.style.background = '#0b1020';
-      doc.body.style.fontFamily = 'Consolas, monospace';
+function normalizeRequest(request) {
+  const source = request?.request || request || {};
 
-      const wrapper = doc.createElement('section');
-      wrapper.id = screenshotName;
-      wrapper.style.minHeight = '100vh';
-      wrapper.style.padding = '32px';
-      wrapper.style.boxSizing = 'border-box';
-      wrapper.style.color = '#e5eefc';
+  return {
+    method: source.method || request?.method || 'UNKNOWN',
+    url: source.url || request?.url || '',
+    headers: source.headers || request?.headers || {},
+    body: source.body ?? request?.body ?? null,
+  };
+}
 
-      const heading = doc.createElement('h1');
-      heading.textContent = title;
-      heading.style.margin = '0 0 12px';
-      heading.style.fontSize = '28px';
+function normalizeResponse(response) {
+  return {
+    status: response?.status,
+    headers: response?.headers || {},
+    body: response?.body,
+  };
+}
 
-      const status = doc.createElement('p');
-      status.textContent = `Status HTTP: ${response.status}`;
-      status.style.margin = '0 0 20px';
-      status.style.fontSize = '18px';
-      status.style.color = '#7dd3fc';
+function renderApiEvidence(title, request, response, fileName, validations = {}) {
+  const evidence = {
+    title,
+    result: Object.values(validations?.response || {}).every((validation) => validation.passed) && Object.values(validations?.request || {}).every((validation) => validation.passed) ? 'pass' : 'fail',
+    request: normalizeRequest(request),
+    response: normalizeResponse(response),
+    validations: {
+      request: validations.request || [],
+      response: validations.response || [],
+    },
+    validatedAt: new Date().toISOString(),
+  };
 
-      const pre = doc.createElement('pre');
-      pre.style.margin = '0';
-      pre.style.padding = '24px';
-      pre.style.background = '#111827';
-      pre.style.border = '1px solid #334155';
-      pre.style.borderRadius = '12px';
-      pre.style.whiteSpace = 'pre-wrap';
-      pre.style.wordBreak = 'break-word';
-      pre.style.maxHeight = '75vh';
-      pre.style.overflow = 'auto';
-      pre.textContent = JSON.stringify({
-        status: response.status,
-        headers: response.headers,
-        body: response.body,
-      }, null, 2);
-
-      wrapper.appendChild(heading);
-      wrapper.appendChild(status);
-      wrapper.appendChild(pre);
-      doc.body.appendChild(wrapper);
-    });
-
-    cy.get(`#${screenshotName}`).should('be.visible');
-    cy.screenshot(screenshotName);
-    cy.wait(2000);
-  });
+  cy.writeFile(`cypress/evidence/${fileName}.json`, evidence);
 }
 
 Given('que o carrinho do usuário com id 1 está limpo', () => {
@@ -63,12 +44,26 @@ Given('que o carrinho do usuário com id 1 está limpo', () => {
 
 When('eu solicitar a lista de produtos sem parâmetros de paginação', () => {
   QaCommerceRequest.getProducts().as('produtosResponse').then((response) => {
-    cy.writeFile('cypress/evidence/api-produtos-response.json', {
-      status: response.status,
-      body: response.body,
-    });
+    const requestSummary = {
+      method: 'GET',
+      url: `${Cypress.config('baseUrl') || 'http://localhost:3000'}/api/produtos`,
+      headers: response?.request?.headers || {},
+      body: null,
+    };
 
-    renderApiEvidence('Evidencia da API: listagem de produtos', response, 'api-produtos-response');
+    const responseValidation = [
+      { name: 'status', expected: 200, actual: response.status, passed: response.status === 200 },
+      { name: 'products array', expected: true, actual: Array.isArray(response.body?.products), passed: Array.isArray(response.body?.products) },
+      { name: 'currentPage', expected: 1, actual: response.body?.currentPage, passed: response.body?.currentPage === 1 },
+    ];
+
+    renderApiEvidence('Evidencia da API: listagem de produtos', requestSummary, response, 'api-produtos-response', {
+      request: [
+        { name: 'method', expected: 'GET', actual: requestSummary.method, passed: requestSummary.method === 'GET' },
+        { name: 'url', expected: '/api/produtos', actual: requestSummary.url, passed: requestSummary.url.includes('/api/produtos') },
+      ],
+      response: responseValidation,
+    });
   });
 });
 
@@ -94,12 +89,26 @@ Then('a página atual deve ser 1', () => {
 When('eu adicionar o produto com id 1 ao carrinho do usuário 1 com quantidade 2', () => {
   cy.fixture('cart-payload').then((payload) => {
     QaCommerceRequest.addToCart(payload).as('adicionarCarrinhoResponse').then((response) => {
-      cy.writeFile('cypress/evidence/api-carrinho-add-response.json', {
-        status: response.status,
-        body: response.body,
-      });
+      const requestSummary = {
+        method: 'POST',
+        url: `${Cypress.config('baseUrl') || 'http://localhost:3000'}/api/carrinho`,
+        headers: response?.request?.headers || {},
+        body: payload,
+      };
 
-      renderApiEvidence('Evidencia da API: adicionar produto ao carrinho', response, 'api-carrinho-add-response');
+      const responseValidation = [
+        { name: 'status', expected: 201, actual: response.status, passed: response.status === 201 },
+        { name: 'message', expected: 'Produto adicionado ao carrinho com sucesso.', actual: response.body?.message, passed: /produto adicionado ao carrinho com sucesso/i.test(response.body?.message || '') },
+      ];
+
+      renderApiEvidence('Evidencia da API: adicionar produto ao carrinho', requestSummary, response, 'api-carrinho-add-response', {
+        request: [
+          { name: 'method', expected: 'POST', actual: requestSummary.method, passed: requestSummary.method === 'POST' },
+          { name: 'url', expected: '/api/carrinho', actual: requestSummary.url, passed: requestSummary.url.includes('/api/carrinho') },
+          { name: 'body', expected: payload, actual: requestSummary.body, passed: JSON.stringify(requestSummary.body) === JSON.stringify(payload) },
+        ],
+        response: responseValidation,
+      });
     });
   });
 });
@@ -119,15 +128,37 @@ Then('a mensagem deve indicar que o produto foi adicionado com sucesso', () => {
 
 Then('o carrinho do usuário 1 deve conter o produto com id 1 e quantidade 2', () => {
   QaCommerceRequest.getCart(1).then((response) => {
-    cy.writeFile('cypress/evidence/api-carrinho-contents-response.json', {
-      status: response.status,
-      body: response.body,
+    const requestSummary = {
+      method: 'GET',
+      url: `${Cypress.config('baseUrl') || 'http://localhost:3000'}/api/carrinho/1`,
+      headers: response?.request?.headers || {},
+      body: null,
+    };
+
+    const item = response.body.find((product) => product.productId === 1);
+    const responseValidation = [
+      { name: 'status', expected: 200, actual: response.status, passed: response.status === 200 },
+      { name: 'product found', expected: true, actual: !!item, passed: !!item },
+      { name: 'quantity', expected: 2, actual: item?.quantity, passed: item?.quantity === 2 },
+    ];
+
+    renderApiEvidence('Evidencia da API: conteudo do carrinho', requestSummary, response, 'api-carrinho-contents-response', {
+      request: [
+        { name: 'method', expected: 'GET', actual: requestSummary.method, passed: requestSummary.method === 'GET' },
+        { name: 'url', expected: '/api/carrinho/1', actual: requestSummary.url, passed: requestSummary.url.includes('/api/carrinho/1') },
+      ],
+      response: responseValidation,
     });
 
-    renderApiEvidence('Evidencia da API: conteudo do carrinho', response, 'api-carrinho-contents-response');
+    cy.visit('/api-evidence.html?file=api-carrinho-contents-response.json');
+    cy.get('.status').should('contain', 'PASSOU');
+    cy.contains('h3', 'Request enviado').should('be.visible');
+    cy.contains('h3', 'Response recebida').should('be.visible');
+    cy.get('#jsonContent .io-panel pre').should('contain', '"status"');
+    cy.get('#jsonContent').scrollIntoView();
+    cy.wait(1000);
 
     expect(response.status).to.eq(200);
-    const item = response.body.find((product) => product.productId === 1);
     expect(item).to.not.be.undefined;
     expect(item.quantity).to.eq(2);
   });

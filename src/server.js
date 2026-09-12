@@ -9,6 +9,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("../config/swagger.json");
 const { authenticateAdmin } = require("../middleware/auth");
 const path = require("path");
+const fs = require("fs");
 const { error } = require("console");
 const app = express();
 const port = 3000;
@@ -16,6 +17,46 @@ const port = 3000;
 // Middleware
 app.use(bodyParser.json());
 app.use(express.static("public"));
+app.use("/evidence", express.static(path.join(__dirname, "../cypress/evidence")));
+app.use("/videos", express.static(path.join(__dirname, "../cypress/videos")));
+
+app.get("/api/evidencias", (req, res) => {
+  const evidenceDir = path.join(__dirname, "../cypress/evidence");
+  const videosDir = path.join(__dirname, "../cypress/videos");
+
+  const jsonFiles = fs.existsSync(evidenceDir)
+    ? fs.readdirSync(evidenceDir)
+        .filter((file) => file.endsWith(".json"))
+        .map((file) => ({
+          name: file,
+          url: `/evidence/${file}`,
+          type: "json",
+          modifiedAt: fs.statSync(path.join(evidenceDir, file)).mtimeMs,
+        }))
+        .sort((a, b) => b.modifiedAt - a.modifiedAt)
+    : [];
+
+  const videos = fs.existsSync(videosDir)
+    ? fs.readdirSync(videosDir, { recursive: true })
+        .filter((file) => typeof file === "string" && file.endsWith(".mp4"))
+        .map((file) => {
+          const normalizedPath = file.replace(/\\/g, "/");
+          const fullPath = path.join(videosDir, normalizedPath);
+          return {
+            name: normalizedPath,
+            url: `/videos/${normalizedPath}`,
+            type: "video",
+            modifiedAt: fs.existsSync(fullPath) ? fs.statSync(fullPath).mtimeMs : 0,
+          };
+        })
+        .sort((a, b) => b.modifiedAt - a.modifiedAt)
+    : [];
+
+  res.json({
+    evidence: jsonFiles,
+    videos,
+  });
+});
 
 // Middleware de autenticação
 function authenticateToken(req, res, next) {

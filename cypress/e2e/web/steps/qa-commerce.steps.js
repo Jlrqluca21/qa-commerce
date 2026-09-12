@@ -3,62 +3,6 @@ import HomePage from '../../../support/pageObjects/HomePage';
 import CartPage from '../../../support/pageObjects/CartPage';
 import CheckoutPage from '../../../support/pageObjects/CheckoutPage';
 
-function renderCheckoutEvidence(messages) {
-  cy.document().then((doc) => {
-    const existing = doc.getElementById('checkout-validation-evidence');
-    if (existing) {
-      existing.remove();
-    }
-
-    const wrapper = doc.createElement('section');
-    wrapper.id = 'checkout-validation-evidence';
-    wrapper.style.position = 'fixed';
-    wrapper.style.inset = '0';
-    wrapper.style.padding = '32px';
-    wrapper.style.boxSizing = 'border-box';
-    wrapper.style.background = 'rgba(11, 16, 32, 0.96)';
-    wrapper.style.color = '#e5eefc';
-    wrapper.style.fontFamily = 'Consolas, monospace';
-    wrapper.style.zIndex = '99999';
-    wrapper.style.overflow = 'auto';
-
-    const heading = doc.createElement('h1');
-    heading.textContent = 'Evidencia Web: validacao do checkout';
-    heading.style.margin = '0 0 12px';
-    heading.style.fontSize = '28px';
-
-    const status = doc.createElement('p');
-    status.textContent = 'Resultado: PASS';
-    status.style.margin = '0 0 20px';
-    status.style.fontSize = '18px';
-    status.style.color = '#4ade80';
-
-    const list = doc.createElement('ul');
-    list.style.margin = '0';
-    list.style.padding = '24px 24px 24px 48px';
-    list.style.background = '#111827';
-    list.style.border = '1px solid #334155';
-    list.style.borderRadius = '12px';
-    list.style.lineHeight = '1.8';
-    list.style.fontSize = '18px';
-
-    messages.forEach((message) => {
-      const item = doc.createElement('li');
-      item.textContent = message;
-      list.appendChild(item);
-    });
-
-    wrapper.appendChild(heading);
-    wrapper.appendChild(status);
-    wrapper.appendChild(list);
-    doc.body.appendChild(wrapper);
-  });
-
-  cy.get('#checkout-validation-evidence').should('be.visible');
-  cy.screenshot('checkout-validation-evidence');
-  cy.wait(2000);
-}
-
 Given('que eu abra a página inicial do QA-Commerce', () => {
   HomePage.visit();
 });
@@ -132,6 +76,8 @@ Then('a página deve mostrar mensagens de validação para os campos obrigatóri
 Then('o pedido não deve ser enviado', () => {
   cy.url().should('include', '/checkout.html');
   cy.get('@checkoutValidationMessages').then((messages) => {
-    renderCheckoutEvidence(messages);
+    expect(messages).to.be.an('array').and.not.to.be.empty;
+    CheckoutPage.getValidationMessages().should('have.length.at.least', 1).and('be.visible');
+    cy.screenshot('checkout-validation-evidence', { capture: 'viewport' });
   });
 });

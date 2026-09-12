@@ -1,7 +1,75 @@
 {
-  "status": 201,
-  "body": {
-    "message": "Produto adicionado ao carrinho com sucesso.",
-    "id": 115
-  }
+  "title": "Evidencia da API: adicionar produto ao carrinho",
+  "result": "pass",
+  "request": {
+    "method": "POST",
+    "url": "http://localhost:3000/api/carrinho",
+    "headers": {},
+    "body": {
+      "userId": 1,
+      "productId": 1,
+      "quantity": 2
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "x-powered-by": "Express",
+      "content-type": "application/json; charset=utf-8",
+      "content-length": "66",
+      "etag": "W/\"42-u9+w3fmXBc5kItAWIOhuPHU+qgY\"",
+      "date": "Sat, 12 Sep 2026 17:17:03 GMT",
+      "connection": "keep-alive",
+      "keep-alive": "timeout=5"
+    },
+    "body": {
+      "message": "Produto adicionado ao carrinho com sucesso.",
+      "id": 146
+    }
+  },
+  "validations": {
+    "request": [
+      {
+        "name": "method",
+        "expected": "POST",
+        "actual": "POST",
+        "passed": true
+      },
+      {
+        "name": "url",
+        "expected": "/api/carrinho",
+        "actual": "http://localhost:3000/api/carrinho",
+        "passed": true
+      },
+      {
+        "name": "body",
+        "expected": {
+          "userId": 1,
+          "productId": 1,
+          "quantity": 2
+        },
+        "actual": {
+          "userId": 1,
+          "productId": 1,
+          "quantity": 2
+        },
+        "passed": true
+      }
+    ],
+    "response": [
+      {
+        "name": "status",
+        "expected": 201,
+        "actual": 201,
+        "passed": true
+      },
+      {
+        "name": "message",
+        "expected": "Produto adicionado ao carrinho com sucesso.",
+        "actual": "Produto adicionado ao carrinho com sucesso.",
+        "passed": true
+      }
+    ]
+  },
+  "validatedAt": "2026-09-12T17:17:03.174Z"
 }

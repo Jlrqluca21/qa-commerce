@@ -1,11 +1,67 @@
 {
-  "status": 200,
-  "body": [
-    {
-      "productId": 1,
-      "name": "Moletom com capuz \"Se você acha que nada é impossível...\"",
-      "price": 59,
-      "quantity": 2
-    }
-  ]
+  "title": "Evidencia da API: conteudo do carrinho",
+  "result": "pass",
+  "request": {
+    "method": "GET",
+    "url": "http://localhost:3000/api/carrinho/1",
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "x-powered-by": "Express",
+      "content-type": "application/json; charset=utf-8",
+      "content-length": "113",
+      "etag": "W/\"71-1Jg0BUJENlVBMl96q9QslAhaiIw\"",
+      "date": "Sat, 12 Sep 2026 17:17:03 GMT",
+      "connection": "keep-alive",
+      "keep-alive": "timeout=5"
+    },
+    "body": [
+      {
+        "productId": 1,
+        "name": "Moletom com capuz \"Se você acha que nada é impossível...\"",
+        "price": 59,
+        "quantity": 2
+      }
+    ]
+  },
+  "validations": {
+    "request": [
+      {
+        "name": "method",
+        "expected": "GET",
+        "actual": "GET",
+        "passed": true
+      },
+      {
+        "name": "url",
+        "expected": "/api/carrinho/1",
+        "actual": "http://localhost:3000/api/carrinho/1",
+        "passed": true
+      }
+    ],
+    "response": [
+      {
+        "name": "status",
+        "expected": 200,
+        "actual": 200,
+        "passed": true
+      },
+      {
+        "name": "product found",
+        "expected": true,
+        "actual": true,
+        "passed": true
+      },
+      {
+        "name": "quantity",
+        "expected": 2,
+        "actual": 2,
+        "passed": true
+      }
+    ]
+  },
+  "validatedAt": "2026-09-12T17:17:03.210Z"
 }

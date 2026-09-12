@@ -1,16 +1,16 @@
 {
   "shipping": {
-    "firstName": "Cecília",
-    "lastName": "Albuquerque",
-    "address": "855 Travessa Martins",
-    "number": "9188",
-    "cep": "66409471",
-    "phone": "0107448156",
-    "email": "cecilia_albuquerque@hotmail.com"
+    "firstName": "Heitor",
+    "lastName": "Macedo",
+    "address": "7562 Avenida Alexandre",
+    "number": "9410",
+    "cep": "30077721",
+    "phone": "0231064900",
+    "email": "heitor.macedo78@hotmail.com"
   },
   "payment": {
     "cardNumber": "4111111111111111",
     "expiry": "12/30",
-    "cvc": "881"
+    "cvc": "420"
   }
 }
